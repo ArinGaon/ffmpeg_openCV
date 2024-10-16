@@ -1,0 +1,22 @@
+## CMake 빌드파일
+
+/build/
+
+## 컴파일러가 생성하는 파일
+
+.exe
+.obj
+.o
+.out
+
+## Cmake 관련 파일 -> 빌드는 로컬에서 진행
+
+CmakeCache.txt
+CmakeFiles/
+*.cmake
+
+## 임시 제외파일
+
+ffmpeg_helper.cpp
+ffmpeg_helper.h
+input.mp4 
