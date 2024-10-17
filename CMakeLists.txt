@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 project(ffmpeg_openCV_Project) 
 
-# OpenCV 라이브러리 경로설정
+# OpenCV 라이브러리 경로 설정
 set(OPENCV_DIR "C:/opencv/build")
 # FFmpeg 라이브러리 경로 설정
 set(FFMPEG_LIB_DIR "C:/ffmpeg/lib")
 set(FFMPEG_INCLUDE_DIR "C:/ffmpeg/include")
 
-# .h, .cpp 추가
-set(SOURCE_FILES src/main.cpp src/ffmpeg_helper.cpp src/ffmpeg_helper.h)
+# 소스파일 추가
+set(SOURCE_FILES src/main.cpp src/video_processor.cpp src/video_processor.h)
 
 find_package(OPENCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
