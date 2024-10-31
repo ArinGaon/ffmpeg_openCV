@@ -7,7 +7,7 @@ int main() {
     VideoProcessor videoProcessor(videoFile);
 
     // 전체 비디오 녹화 및 이벤트 감지 시작
-    if (!videoProcessor.processVideo()) {
+    if (!videoProcessor.ProcessVideo()) {
         std::cerr << "Failed to process video." << std::endl;
         return -1;
     }

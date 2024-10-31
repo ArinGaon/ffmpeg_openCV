@@ -9,7 +9,7 @@
 VideoProcessor::VideoProcessor(const std::string& videoFile) : videoFile(videoFile) {}
 
 // 웹캠 또는 비디오 파일에서 영상을 받아오기
-bool VideoProcessor::processVideo() {
+bool VideoProcessor::ProcessVideo() {
     cv::VideoCapture cap;
 
     if (!videoFile.empty()) {
@@ -32,7 +32,7 @@ bool VideoProcessor::processVideo() {
     double frameHeight = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
 
     // full recording 초기화
-    startFullRecording("full_recording.mp4", frameWidth, frameHeight);
+    StartFullRecording("full_recording.mp4", frameWidth, frameHeight);
 
     cv::Mat frame;
     while (true) {
@@ -47,7 +47,7 @@ bool VideoProcessor::processVideo() {
         }
 
         // 이벤트 감지 및 녹화 처리
-        processFrame(frame);
+        ProcessFrame(frame);
 
         // 프레임을 화면에 표시
         cv::imshow("Video Feed", frame);
@@ -65,13 +65,13 @@ bool VideoProcessor::processVideo() {
     cap.release();  // 카메라 자원 해제
     cv::destroyAllWindows();  // 모든 OpenCV 창 닫기
 
-    stopFullRecording();
+    StopFullRecording();
     return true;
 }
 
 
 // 전체 비디오 녹화 시작
-void VideoProcessor::startFullRecording(const std::string& filename, int width, int height) {
+void VideoProcessor::StartFullRecording(const std::string& filename, int width, int height) {
     int codec = cv::VideoWriter::fourcc('m', 'p', '4', 'v');
     fullVideoWriter.open(filename, codec, 30, cv::Size(width, height));
 
@@ -83,7 +83,7 @@ void VideoProcessor::startFullRecording(const std::string& filename, int width, 
     }
 }
 
-void VideoProcessor::stopFullRecording() {
+void VideoProcessor::StopFullRecording() {
     if (fullVideoWriter.isOpened()) {
         fullVideoWriter.release();
         std::cout << "Full recording stopped and file saved." << std::endl;
@@ -94,7 +94,7 @@ void VideoProcessor::stopFullRecording() {
 }
 
 // 이벤트 비디오 녹화 시작
-void VideoProcessor::startEventRecording() {
+void VideoProcessor::StartEventRecording() {
     std::string filename = "event_record_" + getCurrentTimeStamp() + ".mp4";
 
     int codec = cv::VideoWriter::fourcc('m', 'p', '4', 'v');
@@ -110,7 +110,7 @@ void VideoProcessor::startEventRecording() {
 }
 
 // 이벤트 비디오 녹화 종료
-void VideoProcessor::stopEventRecording() {
+void VideoProcessor::StopEventRecording() {
     isRecording = false;
     videoWriter.release();
 }
@@ -126,7 +126,7 @@ std::string VideoProcessor::getCurrentTimeStamp() {
 }
 
 // 이벤트 감지 및 프레임 처리
-void VideoProcessor::processFrame(const cv::Mat& frame) {
+void VideoProcessor::ProcessFrame(const cv::Mat& frame) {
     cv::Mat grayFrame, diffFrame, thresholdFrame;
     cv::cvtColor(frame, grayFrame, cv::COLOR_BGR2GRAY);
 
@@ -145,13 +145,13 @@ void VideoProcessor::processFrame(const cv::Mat& frame) {
 
     // 쿨다운 적용 및 녹화 지속 시간 제한
     if (eventDetected && !isRecording && std::chrono::duration_cast<std::chrono::seconds>(now - lastRecordingTime).count() >= cooldownDuration) {
-        startEventRecording();  // 이벤트 녹화 시작
+        StartEventRecording();  // 이벤트 녹화 시작
         lastRecordingTime = now; // 마지막 녹화 시간 갱신
     }
     else if (isRecording) {
         // 녹화 중일 때, 녹화 지속 시간이 7초를 넘으면 종료
         if (std::chrono::duration_cast<std::chrono::seconds>(now - eventRecordingStartTime).count() >= 7) {
-            stopEventRecording();
+            StopEventRecording();
         }
         else {
             videoWriter.write(frame);  // 7초가 지나기 전까지는 녹화 유지

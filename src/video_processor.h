@@ -1,3 +1,4 @@
+#pragma once
 #ifndef VIDEO_PROCESSOR_H
 #define VIDEO_PROCESSOR_H
 
@@ -9,16 +10,16 @@ class VideoProcessor {
 public:
     // 생성자 및 웹캠/비디오 파일 처리
     VideoProcessor(const std::string& videoFile);
-    bool processVideo();
+    bool ProcessVideo();
 
     // 풀 영상 녹화 메서드
-    void startFullRecording(const std::string& filename, int width, int height);
-    void stopFullRecording();
+    void StartFullRecording(const std::string& filename, int width, int height);
+    void StopFullRecording();
 
     // 이벤트 감지 및 녹화 메서드
-    void startEventRecording();
-    void stopEventRecording();
-    void processFrame(const cv::Mat& frame);
+    void StartEventRecording();
+    void StopEventRecording();
+    void ProcessFrame(const cv::Mat& frame);
 
 private:
     // 비디오 파일 또는 웹캠을 통해 입력을 받기 위한 변수
