@@ -44,3 +44,4 @@
 ###### 특이사항
     * visual studio 2022 에서 작업하였고 이에 openCV 환경변수 경로는 x64/vc16으로 설정해주어야함
     * CMakeLists.txt에 명시된 라이브러리 경로는 로컬 컴퓨터에 따라 설정해주어야 함
+    * openCV 버전 4.10.0, ffmpeg 7.1full-build-shared 사용
