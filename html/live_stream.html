@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <h1>Live Stream from Webcam</h1>
+    <video id="video" controls autoplay muted width="640" height="360"></video>
+
+    <script>
+        if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls({
+                liveSyncDurationCount: 1, // 가능한 최신 세그먼트를 유지
+            });
+            hls.loadSource('http://localhost:8080/hls/stream.m3u8');
+            hls.attachMedia(video);
+            
+            // 비디오가 자동 재생되도록 설정
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+
+            // 버퍼링 이벤트 추가
+            hls.on(Hls.Events.BUFFER_APPENDING, function(event, data) {
+                console.log("Appending to buffer:", data);
+            });
+
+            hls.on(Hls.Events.BUFFER_APPENDED, function(event, data) {
+                console.log("Buffer appended successfully:", data);
+            });
+
+            // 오류 이벤트 로깅
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                console.error("HLS.js Error: ", data);
+            });
+            
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = 'http://localhost:8080/hls/stream.m3u8';
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>
