@@ -11,6 +11,7 @@
     * FFmpeg : 영상을 받아오는 역할, 여러 형식의 비디오를 디코딩하고 재생 및 저장함
     * OpenCV : 객체감지, 움직임 분석, 얼굴인식, 특정 패턴 분석 등을 처리
     * Cmake : 다양한 파일들을 하나의 빌드파일로 빌드
+    * Nginx : RTMP 프로토콜을 사용해 서버로 웹캠영상을 전송
 
 ## 주요 기능
 
@@ -40,8 +41,28 @@
         * 딥러닝 모델을 활용하여 행동패턴을 학습하고 정확한 이상행동을 감지
         * 한 대의 카메라가 아닌 다중 카메라를 지원하여 여러 영상 스트림을 동시에 분석
 
+### 가이드라인 (CmakeList.txt에 따른 권장사항 & 서버구동 필수사항) 
+
+    * CMake 설치 후 bash의 경로를 이 레포지토리가 저장된 경로로 지정하고 Cmake로 빌드
+    * Ngnix 설치 후, 
+        ** config 폴더 내의 nginx.conf 파일을 ngnix 폴더의 conf 폴더 내로 복사
+        ** html 폴더 내의 live_stream.html파일을 ngnix 폴더의 html 폴더 내로 복사
+    * Cmake, openCV, ffmpeg은 모두 C:\ 경로로 저장하는 것을 권장함
+    * 서버를 구동하기 위한 ffmpeg 명령어는 ffmpeg -re (-f dshow -i video="Microsoft® LifeCam HD-3000") -c:v libx264 -f flv rtmp://localhost:1935/hls/stream 의 형식을 가짐
+        ** 괄호 부분은 웹캠을 끌어올 때 사용, 일반 영상을 송출하고 싶으면 -i "파일명"의 형식으로 지정하면 됨
+        ** libx264는 코덱부분, 위 예제에서는 H264코덱으로 송출하겠다는 의미로 본인의 상황에 맞게 변경가능
+        ** 서버 구동 시, nginx.exe를 실행하는것보다 terminal을 열어서 명령어로 구동하는 것이 진행상황을 확실하게 확인할 수 있음
 
 ###### 특이사항
-    * visual studio 2022 에서 작업하였고 이에 openCV 환경변수 경로는 x64/vc16으로 설정해주어야함
-    * CMakeLists.txt에 명시된 라이브러리 경로는 로컬 컴퓨터에 따라 설정해주어야 함
+
+    * src 내의 코드는 모두 visual studio 2022 에서 작업하였고 이에 openCV 환경변수 경로는 x64/vc16으로 설정해주어야함
+    * C++을 제외한 코드는 vs code에서 작성
+    * CMakeLists.txt에 명시된 라이브러리 경로는 로컬 컴퓨터에 따라 설정해주어야 함 (C: 권장)
     * openCV 버전 4.10.0, ffmpeg 7.1full-build-shared 사용
+
+##### 다운로드 링크
+
+    * Ngnix-RTMP Windows : https://github.com/illuspas/nginx-rtmp-win32
+    * openCV (ver 4.10.0) : https://opencv.org/releases/
+    * ffmpeg : https://github.com/GyanD/codexffmpeg/releases/tag/2024-10-31-git-87068b9600 -> full_build
+    * Cmake : https://cmake.org/download/
