@@ -1,6 +1,7 @@
 ## CMake 빌드파일
 
 /build/
+/VideoControl/
 
 ## Cmake 관련 파일 -> 빌드는 로컬에서 진행
 
