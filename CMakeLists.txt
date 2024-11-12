@@ -1,16 +1,36 @@
 cmake_minimum_required(VERSION 3.10)
-project(ffmpeg_openCV_Project) 
+project(ffmpeg_openCV_Project VERSION 0.1 LANGUAGES CXX)
 
-# OpenCV 라이브러리 경로 설정
+# C++ 표준 설정
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Qt 자동 기능 설정
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+# 라이브러리 경로 설정
 set(OPENCV_DIR "C:/opencv/build")
-# FFmpeg 라이브러리 경로 설정
 set(FFMPEG_LIB_DIR "C:/ffmpeg/lib")
 set(FFMPEG_INCLUDE_DIR "C:/ffmpeg/include")
 
-# 소스파일 추가
-set(SOURCE_FILES src/main.cpp src/video_processor.cpp src/video_processor.h)
+# 소스 파일 및 헤더 파일 추가
+set(SOURCE_FILES 
+    src/main.cpp 
+    src/mainwindow.cpp
+    src/mainwindow.h
+    src/mainwindow.ui
+    src/video_processor.cpp 
+    src/video_processor.h
+    src/video_capture.cpp 
+    src/video_capture.h 
+    src/video_streamer.cpp 
+    src/video_streamer.h
+)
 
-find_package(OPENCV REQUIRED)
+# OpenCV 설정
+find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 # FFmpeg 라이브러리 찾기
@@ -19,11 +39,42 @@ find_library(AVFORMAT_LIB avformat HINTS ${FFMPEG_LIB_DIR})
 find_library(AVUTIL_LIB avutil HINTS ${FFMPEG_LIB_DIR})
 find_library(SWSCALE_LIB swscale HINTS ${FFMPEG_LIB_DIR})
 
-# Include 디렉토리 추가
+# FFmpeg Include 디렉토리 추가
 include_directories(${FFMPEG_INCLUDE_DIR})
 
-# Executable 추가
-add_executable(ffmpeg_openCV_Project ${SOURCE_FILES})
+# Qt 라이브러리 설정
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-# 라이브러리 링크
-target_link_libraries(ffmpeg_openCV_Project ${OpenCV_LIBS} ${AVCODEC_LIB} ${AVFORMAT_LIB} ${AVUTIL_LIB} ${SWSCALE_LIB})
+# 실행 파일 생성
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(ffmpeg_openCV_Project
+        MANUAL_FINALIZATION
+        ${SOURCE_FILES}
+    )
+else()
+    add_executable(ffmpeg_openCV_Project
+        ${SOURCE_FILES}
+    )
+endif()
+
+# 라이브러리 링크 설정
+target_link_libraries(ffmpeg_openCV_Project 
+    PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    ${OpenCV_LIBS} 
+    ${AVCODEC_LIB} 
+    ${AVFORMAT_LIB} 
+    ${AVUTIL_LIB} 
+    ${SWSCALE_LIB}
+)
+
+# 설치 설정
+install(TARGETS ffmpeg_openCV_Project
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# Qt6용 최종 실행 파일 설정
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(ffmpeg_openCV_Project)
+endif()
