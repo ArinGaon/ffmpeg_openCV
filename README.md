@@ -12,6 +12,7 @@
     * OpenCV : 객체감지, 움직임 분석, 얼굴인식, 특정 패턴 분석 등을 처리
     * Cmake : 다양한 파일들을 하나의 빌드파일로 빌드
     * Nginx : RTMP 프로토콜을 사용해 서버로 웹캠영상을 전송
+    * Qt : C++ GUI 구성을 위한 라이브러리
 
 ## 주요 기능
 
@@ -59,6 +60,8 @@
     * C++을 제외한 코드는 vs code에서 작성
     * CMakeLists.txt에 명시된 라이브러리 경로는 로컬 컴퓨터에 따라 설정해주어야 함 (C: 권장)
     * openCV 버전 4.10.0, ffmpeg 7.1full-build-shared 사용
+    * Qt 라이브러리 버전 6.8.0 버전 사용 -> installer에서 6.8.0버전 사용 
+        ** 5버전 이하의 Qt를 사용하여 편집할 경우 CMakeLists 편집필요(if구문 추가해서 버전을 맞춰줘야함)
 
 ##### 다운로드 링크
 
@@ -66,3 +69,4 @@
     * openCV (ver 4.10.0) : https://opencv.org/releases/
     * ffmpeg : https://github.com/GyanD/codexffmpeg/releases/tag/2024-10-31-git-87068b9600 -> full_build
     * Cmake : https://cmake.org/download/
+    * QT (ver 6.8.0) : https://www.qt.io/download-dev#eval-form
