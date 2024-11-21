@@ -17,16 +17,17 @@ set(FFMPEG_INCLUDE_DIR "C:/ffmpeg/include")
 
 # 소스 파일 및 헤더 파일 추가
 set(SOURCE_FILES 
-    #src/core/main.cpp 
+    #src/core/main.cpp #core main.cpp # logic
     src/core/video_processor.cpp 
     src/core/video_processor.h
 
     src/gui/mainwindow.cpp
     src/gui/mainwindow.h
     src/gui/mainwindow.ui    
-
-    src/main.cpp # GUI main.cpp
+    src/gui/main.cpp # gui main.cpp
 )
+include_directories(${CMAKE_SOURCE_DIR}/src/gui)
+
 # Cmake path 설정
 set(CMAKE_PREFIX_PATH "C:/Qt/6.8.0/msvc2022_64" "C:/opencv/build/x64/vc16/lib")
 
@@ -71,7 +72,7 @@ install(TARGETS ffmpeg_openCV_Project
 )
 
 # Qt6용 최종 실행 파일 설정
-#if(QT_VERSION_MAJOR EQUAL 6)
-#    qt_finalize_executable(ffmpeg_openCV_Project)
-#endif()
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(ffmpeg_openCV_Project)
+endif()
  
