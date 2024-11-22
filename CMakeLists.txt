@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC_SEARCH_PATHS src/gui)
 
 # 라이브러리 경로 설정
 set(OPENCV_DIR "C:/opencv/build")
@@ -17,20 +18,22 @@ set(FFMPEG_INCLUDE_DIR "C:/ffmpeg/include")
 
 # 소스 파일 및 헤더 파일 추가
 set(SOURCE_FILES 
-    #src/core/main.cpp #core main.cpp # logic
+    # src/core/main.cpp # logic
     src/core/video_processor.cpp 
     src/core/video_processor.h
 
     src/gui/mainwindow.cpp
     src/gui/mainwindow.h
     src/gui/mainwindow.ui    
-    src/gui/main.cpp # gui main.cpp
+    src/gui/main.cpp # GUI
 )
+
+# 디렉토리 추가
 include_directories(${CMAKE_SOURCE_DIR}/src/gui)
+include_directories(${CMAKE_SOURCE_DIR}/src/core)
 
-# Cmake path 설정
+# CMake path 설정
 set(CMAKE_PREFIX_PATH "C:/Qt/6.8.0/msvc2022_64" "C:/opencv/build/x64/vc16/lib")
-
 
 # OpenCV 설정
 find_package(OpenCV REQUIRED)
@@ -47,18 +50,17 @@ include_directories(${FFMPEG_INCLUDE_DIR})
 
 # Qt 라이브러리 설정
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 # 실행 파일 생성
 qt_add_executable(ffmpeg_openCV_Project
     ${SOURCE_FILES}
 )
 
-
 # 라이브러리 링크 설정
 target_link_libraries(ffmpeg_openCV_Project 
     PRIVATE 
-    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt6::Widgets 
     ${OpenCV_LIBS} 
     ${AVCODEC_LIB} 
     ${AVFORMAT_LIB} 
@@ -72,7 +74,7 @@ install(TARGETS ffmpeg_openCV_Project
 )
 
 # Qt6용 최종 실행 파일 설정
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(ffmpeg_openCV_Project)
-endif()
- 
+# qt_finalize_executable(ffmpeg_openCV_Project)
+
+# 문자 인코딩 명시
+add_compile_options(/utf-8)
