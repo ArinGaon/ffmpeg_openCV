@@ -18,9 +18,13 @@ set(FFMPEG_INCLUDE_DIR "C:/ffmpeg/include")
 
 # 소스 파일 및 헤더 파일 추가
 set(SOURCE_FILES 
+    # 영상 소스 로직
     # src/core/main.cpp # logic
-    src/core/video_processor.cpp 
+    src/core/video_processor.cpp  
     src/core/video_processor.h
+    # 이벤트 처리 로직
+    src/core/event_processor.cpp
+    src/core/event_processor.h
 
     src/gui/mainwindow.cpp
     src/gui/mainwindow.h
