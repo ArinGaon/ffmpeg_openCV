@@ -17,8 +17,8 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>320</y>
+      <x>180</x>
+      <y>400</y>
       <width>441</width>
       <height>80</height>
      </rect>
@@ -57,28 +57,41 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>420</y>
+      <x>70</x>
+      <y>480</y>
       <width>651</width>
-      <height>131</height>
+      <height>81</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="statusLabel">
        <property name="text">
         <string>waiting...</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLineEdit" name="streamURLLineEdit">
        <property name="text">
-        <string>waiting</string>
+        <string>Streaming URL</string>
        </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="videoLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>721</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>waiting</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
