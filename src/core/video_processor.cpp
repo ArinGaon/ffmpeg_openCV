@@ -7,6 +7,7 @@
 #include <thread>
 
 VideoProcessor::VideoProcessor(const std::string& videoFile) : videoFile(videoFile) {}
+VideoProcessor::VideoProcessor() {}
 
 // 웹캠 또는 비디오 파일에서 영상을 받아오기
 bool VideoProcessor::ProcessVideo() {
@@ -71,15 +72,17 @@ bool VideoProcessor::ProcessVideo() {
 
 
 // 전체 비디오 녹화 시작
-void VideoProcessor::StartFullRecording(const std::string& filename, int width, int height) {
+bool VideoProcessor::StartFullRecording(const std::string& filename, int width, int height) {
     int codec = cv::VideoWriter::fourcc('m', 'p', '4', 'v');
     fullVideoWriter.open(filename, codec, 30, cv::Size(width, height));
 
     if (!fullVideoWriter.isOpened()) {
         std::cerr << "Error: Could not open full recording video writer." << std::endl;
+        return false;
     }
     else {
         std::cout << "Full recording started: " << filename << std::endl;
+        return true;
     }
 }
 
@@ -160,3 +163,19 @@ void VideoProcessor::ProcessFrame(const cv::Mat& frame) {
 
     grayFrame.copyTo(previousFrame);
 }
+
+
+// Qt startStreaming 버튼 메서드
+bool VideoProcessor::startStreaming(const std::string& url) {
+    // 스트리밍 시작
+    std::cout << "Starting Streaming to URL : " << url << std::endl;
+    return true; // 성공하면 true
+}
+
+// Qt stopStreaming 버튼 메서드
+void VideoProcessor::stopStreaming() {
+    // 스트리밍 중지
+    std::cout << "Streaming stopped." << std::endl;
+}
+
+

@@ -8,12 +8,14 @@
 
 class VideoProcessor {
 public:
+    VideoProcessor();
+
     // 생성자 및 웹캠/비디오 파일 처리
     VideoProcessor(const std::string& videoFile);
     bool ProcessVideo();
 
     // 풀 영상 녹화 메서드
-    void StartFullRecording(const std::string& filename, int width, int height);
+    bool StartFullRecording(const std::string& filename, int width, int height);
     void StopFullRecording();
 
     // 이벤트 감지 및 녹화 메서드
@@ -21,9 +23,14 @@ public:
     void StopEventRecording();
     void ProcessFrame(const cv::Mat& frame);
 
+    // Qt UI에 연동할 메서드
+    bool startStreaming(const std::string& url);
+    void stopStreaming();
+
+
 private:
     // 비디오 파일 또는 웹캠을 통해 입력을 받기 위한 변수
-    std::string videoFile;
+    std::string videoFile = "";
 
     // 녹화 상태 관리 변수
     bool isRecording = false;
