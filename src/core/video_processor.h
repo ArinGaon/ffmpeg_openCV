@@ -2,6 +2,7 @@
 #ifndef VIDEO_PROCESSOR_H
 #define VIDEO_PROCESSOR_H
 
+#include "event_processor.h"
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <chrono>
@@ -31,6 +32,7 @@ public:
 private:
     // 비디오 파일 또는 웹캠을 통해 입력을 받기 위한 변수
     std::string videoFile = "";
+    EventProcessor eventProcessor; // 이벤트 처리기
 
     // 녹화 상태 관리 변수
     bool isRecording = false;
