@@ -91,3 +91,9 @@ std::string EventProcessor::generateFileName() const {
     ss << std::put_time(std::localtime(&in_time_t), "%Y%m%d_%H%M%S") << ".mp4";
     return ss.str();
 }
+
+// 이벤트 record 경로 업데이트
+void EventProcessor::setSavePath(const std::string& newSavePath) {
+    savePath = newSavePath; // 경로 업데이트
+    std::cout << "Event save path updated to: " << savePath << std::endl;
+}

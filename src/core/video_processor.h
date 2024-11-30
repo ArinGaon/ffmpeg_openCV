@@ -19,15 +19,12 @@ public:
     bool StartFullRecording(const std::string& filename, int width, int height);
     void StopFullRecording();
 
-    // 이벤트 감지 및 녹화 메서드
-    void StartEventRecording();
-    void StopEventRecording();
-    void ProcessFrame(const cv::Mat& frame);
-
     // Qt UI에 연동할 메서드
     bool startStreaming(const std::string& url);
     void stopStreaming();
 
+    // 저장 경로 설정 메서드 추가
+    void setEventSavePath(const std::string& path); // 이벤트 경로 변경
 
 private:
     // 비디오 파일 또는 웹캠을 통해 입력을 받기 위한 변수

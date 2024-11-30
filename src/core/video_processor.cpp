@@ -5,8 +5,16 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 #include <thread>
-
+// 이벤트 파일 저장 경로 지정
 #define EVENT_SAVE_DIRECTORY "C:/ArinGaon/Event_Recording"
+
+// 만일 EVENT_SAVE_DIRECTORY의 경로가 존재하지 않는다면
+void CheckEventDirectory() {
+    if (!std::filesystem::exists(EVENT_SAVE_DIRECTORY)) {
+        std::filesystem::create_directories(EVENT_SAVE_DIRECTORY);
+        std::cout << "Created Directory : " << EVENT_SAVE_DIRECTORY << std::endl;
+    }
+}
 
 VideoProcessor::VideoProcessor(const std::string& videoFile)
     : videoFile(videoFile), eventProcessor(EVENT_SAVE_DIRECTORY) {}
@@ -55,17 +63,17 @@ bool VideoProcessor::ProcessVideo() {
         eventProcessor.processFrame(frame);
 
         // 프레임을 화면에 표시
-        cv::imshow("Video Feed", frame);
+        /*cv::imshow("Video Feed", frame);
 
         // ESC (27) 또는 'q' (113) 키가 눌리면 종료
         int key = cv::waitKey(30);
         if (key == 27 || key == 'q') {  // 27: ESC 키, 'q': ASCII 값 113
             break;
         }
-
+        */
+    }
         // full recording에도 프레임 저장
         fullVideoWriter.write(frame);
-    }
 
     cap.release();  // 카메라 자원 해제
     cv::destroyAllWindows();  // 모든 OpenCV 창 닫기
@@ -100,6 +108,13 @@ void VideoProcessor::StopFullRecording() {
     }
 }
 
+// EventProcessor의 setSavePath 메서드를 호출
+void VideoProcessor::setEventSavePath(const std::string& path) {
+    eventProcessor.setSavePath(path); // EventProcessor의 경로 변경
+    std::cout << "VideoProcessor: Event save path updated to " << path << std::endl;
+}
+
+
 // Qt startStreaming 버튼 메서드
 bool VideoProcessor::startStreaming(const std::string& url) {
     // 스트리밍 시작
@@ -112,5 +127,7 @@ void VideoProcessor::stopStreaming() {
     // 스트리밍 중지
     std::cout << "Streaming stopped." << std::endl;
 }
+
+
 
 
