@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QString>
 #include "video_processor.h"
 #include "opencv2/opencv.hpp"
 
@@ -28,6 +29,7 @@ private slots:
     void on_startStreamButton_clicked();
     void on_stopStreambutton_clicked();
     // 클릭 함수기에 clicked로 선언하고 Qt Creater에 만들어놓은 블럭명과 일치시킴
+    void on_setEventPathButton_clicked(); // event 슬롯 선언
 
 
 private:
@@ -35,5 +37,6 @@ private:
     VideoProcessor *videoProcessor; // 객체 선언
     cv::VideoCapture videoCapture;
     QTimer* timer;
+    QString eventVideoPath; // 이벤트 저장 경로
 };
 #endif // MAINWINDOW_H

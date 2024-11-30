@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QImage>
 #include <Qpixmap>
+#include <QFileDialog>
+#include "event_processor.h"
 
 #include "opencv2/opencv.hpp"
 
@@ -25,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateFrame);
     timer->start(30); // 30ms 간격으로 업데이트 (약 33fps)
+
+
+    // 초기 이벤트 경로 설정 (기본값)
+    eventVideoPath = "path/to/default/event_videos/";
+    ui->eventPathLabel->setText(eventVideoPath); // UI에 초기값 표시
 
 }
 
@@ -88,4 +95,18 @@ void MainWindow::updateFrame()
     // QLabel에 이미지 표시
     ui->videoLabel->setPixmap(QPixmap::fromImage(qImg).scaled(
         ui->videoLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
+
+// 슬롯 구현
+void MainWindow::on_setEventPathButton_clicked()
+{
+    // QFileDialog로 디렉토리 선택
+    QString selectedDir = QFileDialog::getExistingDirectory(this, "Select Event Video Directory", eventVideoPath);
+    if (!selectedDir.isEmpty()) {
+        eventVideoPath = selectedDir + "/"; // 새로운 경로 설정
+        ui->eventPathLabel->setText(eventVideoPath); // UI 업데이트
+    }
+    else {
+        QMessageBox::information(this, "Info", "Event video path not changed.");
+    }
 }
