@@ -22,6 +22,8 @@ set(SOURCE_FILES
     # src/core/main.cpp # logic
     src/core/video_processor.cpp  
     src/core/video_processor.h
+    src/core/streaming.h
+    src/core/streaming.cpp
     # 이벤트 처리 로직
     src/core/event_processor.cpp
     src/core/event_processor.h
