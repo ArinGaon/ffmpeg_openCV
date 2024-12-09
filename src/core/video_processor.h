@@ -16,7 +16,7 @@ public:
     bool ProcessVideo();
 
     // 풀 영상 녹화 메서드
-    bool StartFullRecording(const std::string& filename, int width, int height);
+    bool StartFullRecording(const std::string& filename);
     void StopFullRecording();
 
     // Qt UI에 연동할 메서드
@@ -30,6 +30,7 @@ private:
     // 비디오 파일 또는 웹캠을 통해 입력을 받기 위한 변수
     std::string videoFile = "";
     EventProcessor eventProcessor; // 이벤트 처리기
+    double frameWidth, frameHeight; 
 
     // 녹화 상태 관리 변수
     bool isRecording = false;

@@ -41,11 +41,11 @@ bool VideoProcessor::ProcessVideo() {
     }
 
     // VideoCapture의 해상도를 기반으로 VideoWriter 설정
-    double frameWidth = cap.get(cv::CAP_PROP_FRAME_WIDTH);
-    double frameHeight = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    VideoProcessor::frameWidth = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    VideoProcessor::frameHeight = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
 
     // full recording 초기화
-    StartFullRecording("full_recording.mp4", frameWidth, frameHeight);
+    // StartFullRecording("full_recording.mp4", frameWidth, frameHeight);
 
     cv::Mat frame;
     while (true) {
@@ -59,7 +59,6 @@ bool VideoProcessor::ProcessVideo() {
             cv::cvtColor(frame, frame, cv::COLOR_GRAY2BGR);
         }
 
-        // 이벤트 감지 및 녹화 처리
         eventProcessor.processFrame(frame);
 
         // 프레임을 화면에 표시
@@ -84,9 +83,32 @@ bool VideoProcessor::ProcessVideo() {
 
 
 // 전체 비디오 녹화 시작
-bool VideoProcessor::StartFullRecording(const std::string& filename, int width, int height) {
+bool VideoProcessor::StartFullRecording(const std::string& filename) {
+    cv::Mat frame;
+    cv::VideoCapture cap;
+    cap.open(0);
+    VideoProcessor::frameWidth = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    VideoProcessor::frameHeight = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+
     int codec = cv::VideoWriter::fourcc('m', 'p', '4', 'v');
-    fullVideoWriter.open(filename, codec, 30, cv::Size(width, height));
+    fullVideoWriter.open(filename, codec, 30, cv::Size(frameWidth, frameHeight));
+    while (true) {
+        cap >> frame;  // 다음 프레임 가져오기
+        if (frame.empty()) {
+            std::cerr << "Error: Frame is empty!" << std::endl;
+            break;
+        }
+
+        if (frame.channels() == 1) {
+            cv::cvtColor(frame, frame, cv::COLOR_GRAY2BGR);
+        }
+
+        eventProcessor.processFrame(frame);
+
+        
+    }
+    fullVideoWriter.write(frame);
+
 
     if (!fullVideoWriter.isOpened()) {
         std::cerr << "Error: Could not open full recording video writer." << std::endl;
