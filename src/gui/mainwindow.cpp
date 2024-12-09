@@ -6,21 +6,23 @@
 #include <Qpixmap>
 #include <QFileDialog>
 #include "event_processor.h"
-
+#include "streaming.h"
 #include "opencv2/opencv.hpp"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , videoProcessor(new VideoProcessor()) // videoProcessor 객체
+    , streaming(new Streaming(this)) // Streaming 객체 생성
 {
     ui->setupUi(this);
 
+    QString streamURL = "http://138.2.123.234:8080/live_stream.html";
+    videoCapture.open(streamURL.toStdString());
     // OpenCV VideoCapture 초기화 (웹캠 or 스트리밍 소스)
-    videoCapture.open(0); // 0은 기본 웹캠. 스트리밍 URL을 사용할 수도 있음.
     if (!videoCapture.isOpened()) {
         qDebug() << "Failed to open video source!";
-        return;
+         return;
     }
 
     // QTimer로 프레임 업데이트
@@ -30,28 +32,29 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // 초기 이벤트 경로 설정 (기본값)
-    eventVideoPath = "path/to/default/event_videos/";
+    eventVideoPath = "C:/ArinGaon/test";
     ui->eventPathLabel->setText(eventVideoPath); // UI에 초기값 표시
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete videoProcessor;
+    delete streaming;
 }
 
 void MainWindow::on_startRecordButton_clicked() 
 {
-    videoProcessor->ProcessVideo();
+    // videoProcessor->ProcessVideo();
     // VideoProcessor의 녹화 시작 메서드 호출
-   /* if (videoProcessor->StartFullRecording("output.mp4", 640, 480)) {
+
+    if (videoProcessor->StartFullRecording("output.mp4")) {
         QMessageBox::information(this, "Record", "Recording started!");
     }
     else {
         QMessageBox::critical(this, "Record", "Failed to start recording!");
     }
-    */
+    
 }
 
 void MainWindow::on_stopRecordButton_clicked()
@@ -64,22 +67,28 @@ void MainWindow::on_stopRecordButton_clicked()
 
 void MainWindow::on_startStreamButton_clicked()
 {
-    // 스트리밍 URL을 가져와 VideoProcessor 메서드에 전달
     QString streamURL = ui->streamURLLineEdit->text();
-    if (videoProcessor->startStreaming(streamURL.toStdString())) {
+    if (streamURL.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Stream URL is empty!");
+        return;
+    }
+
+    if (streaming->start(streamURL)) {
+        ui->statusLabel->setText("Streaming started.");
         QMessageBox::information(this, "Stream", "Streaming started!");
     }
     else {
         QMessageBox::critical(this, "Stream", "Failed to start streaming!");
     }
-
 }
 
-void MainWindow::on_stopStreambutton_clicked()
+void MainWindow::on_stopStreamButton_clicked()
 {
-    videoProcessor->stopStreaming();
+    streaming->stop();
     ui->statusLabel->setText("Streaming stopped.");
+    QMessageBox::information(this, "Stream", "Streaming stopped!");
 }
+
 
 void MainWindow::updateFrame()
 {
